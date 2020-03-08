@@ -1,6 +1,9 @@
 # Seme WebStack
 Seme WebStack is container base application for development or production Seme Framework using Nginx and PHP-FPM
 
+## version
+This is initial version 1.0.0. 
+
 ## Prerequisited
 Before doing anything, first download and install latest version of docker.
 - [Docker for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
