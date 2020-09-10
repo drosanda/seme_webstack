@@ -2,27 +2,33 @@
 Seme WebStack is container base application for development or production Seme Framework using Nginx and PHP-FPM
 
 ## version
-This is initial version 1.0.0. 
+This is initial version 1.0.0.
 
 ## Prerequisited
 Before doing anything, first download and install latest version of docker.
 - [Docker for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 - [Docker for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
 
-## Installation
-For installation we have to create PHP image first.
+## Using the image
+Before we can using the image, we have to install image for php first.
 
-### PHP Image
-Open CMD and change dir to php directory and then execute
+### Building php image
+
+Open CMD and change dir to php directory and then execute.
 
 ```CLI
 docker build -t seme_webstack_php .
 ```
+
 Site back and relax because this process will takes more times than you wanted.
 
 ### Docker Compose
-After building PHP image completed, back parent directory and then execute docker compose
+After building PHP image completed, back parent directory
+```CLI
+cd ..
+```
 
+and then execute docker compose
 
 ```CLI
 docker-compose up
