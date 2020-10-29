@@ -95,11 +95,11 @@ for using this container you can combine the source code by using `git submodule
 
 ### Using `git submodule`
 
-We assuming you install seme_webstack same way with download and instal.
+We assuming you install seme_webstack same way with download and install section.
 
 #### Windows
 
-Untuk windows, jalankan ini di terminal atau CMD.
+Please run this from terminal, CMD, or CMDER.
 ```
 D:
 cd seme_webstack
@@ -109,7 +109,7 @@ git submodule https://github.com/drosanda/seme-framework.git code
 
 #### Mac
 
-Untuk mac, jalankan ini di terminal atau CMD.
+Please run this command from terminal.
 ```
 cd
 cd seme_webstack
