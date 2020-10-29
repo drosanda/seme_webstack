@@ -1,41 +1,76 @@
 # Seme WebStack
-Seme WebStack is container base application for development or production Seme Framework using Nginx and PHP-FPM
+Seme WebStack is a Container which already has Nginx and PHP-FPM version 7.x. This container is used for development and production processes for the container based server.
 
-## version
-This is initial version 1.0.0.
+This tutorial in English. For [Tutorial dalam bahasa Indonesia open this link](https://github.com/drosanda/seme_webstack/blob/master/readme-id.md).
+
+## Change log
+Here is the list of version change log.
+
+### version 1.0.1
+Change default PHP-FPM container to 7.4
+
+### version 1.0.0
+This is initial version.
 
 ## Prerequisited
 Before doing anything, first download and install latest version of docker.
 - [Docker for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 - [Docker for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
 
-## Using the image
-Before we can using the image, we have to install image for php first.
+## Download and Install
 
-### Building php image
+This is the way of download and install SEME_WebStack.
 
-Open CMD and change dir to php directory and then execute.
+### Download using git in windows
 
-```CLI
+Please make sure you have already installed git for you computer.
+
+We assumed you want to installed on drive D.
+
+Run this command from terminal, CMD or CMDER.
+```
+d:
+git clone https://github.com/drosanda/seme_webstack.git
+cd  seme_webstack
+```
+### Download using git in mac
+
+Please make sure you have already installed git for you computer.
+
+We assumed you want to installed on current user home directory.
+
+Run this command from terminal.
+
+```
+cd
+git clone https://github.com/drosanda/seme_webstack.git
+cd  seme_webstack
+```
+
+### Building PHP-FPM image
+
+After clone or download we have to build PHP-FPM image.
+This process will take a while depends on your internet connection and your computer specification.
+
+On inside seme_webstack directory, run this command.
+
+```
+cd php
 docker build -t seme_webstack_php .
 ```
 
 Site back and relax because this process will takes more times than you wanted.
 
-### Docker Compose
-After building PHP image completed, back parent directory
-```CLI
-cd ..
+### Running Docker Compose
+After building PHP image completed, back to seme_webstack directory by executing this command and then execute docker compose.
+
 ```
-
-and then execute docker compose
-
-```CLI
+cd ..
 docker-compose up
 ```
 
-### Testing
-After docker compose finished, you can try open (localhost)[http://localhost/] to see the container already started or not.
+## Test the Container
+After docker compose finished, you can try open http://localhost/ to see the container already started or not.
 
 # License
 This project under licensed on MIT more information of license can be found on license.txt
