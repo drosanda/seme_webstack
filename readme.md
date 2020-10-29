@@ -12,7 +12,7 @@ Change default PHP-FPM container to 7.4
 ### version 1.0.0
 This is initial version.
 
-## Stuktur File dan direktori
+## Directory and files structure
 
 Here is the explanation for file and directory structure:
 
@@ -95,7 +95,7 @@ for using this container you can combine the source code by using `git submodule
 
 ### Using `git submodule`
 
-We assuming you install seme_webstack same way with download and install.
+We assuming you install seme_webstack same way with download and instal.
 
 #### Windows
 
