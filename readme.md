@@ -1,121 +1,72 @@
 # Seme WebStack
-Seme WebStack is a Container which already has Nginx and PHP-FPM version 7.x. This container is used for development and production processes for the container based server.
 
-This tutorial in English. For [Tutorial dalam bahasa Indonesia open this link](https://github.com/drosanda/seme_webstack/blob/master/readme-id.md).
+Seme WebStack is a Docker Compose development environment that serves PHP applications with Nginx and PHP-FPM. It includes PHP-FPM image definitions for PHP 7.4 and PHP 8.2–8.5; the Compose configuration defaults to PHP 8.5.
 
-## Change log
-Here is the list of version change log.
+The application files are mounted from the repository root into both containers at `/var/www/html`. Nginx listens on host port `8080`, and forwards PHP requests to the `php` service.
 
-### version 1.0.1
-Change default PHP-FPM container to 7.4
+[Baca dokumentasi dalam Bahasa Indonesia](readme-id.md).
 
-### version 1.0.0
-This is initial version.
+## Requirements
 
-## Directory and files structure
+- Docker Engine with the Docker Compose plugin (`docker compose`)
+- Git, to clone the repository
 
-Here is the explanation for file and directory structure:
+## Quick start
 
-```
-|-- code (directory for php source code)
-|---- index.php (contain only phpinfo for testing purpose)
-|- conf (Directory for configuration)
-|- php
-|---- Dockerfile (Dockerfile for PHP-FPM image)
-|- docker-compose.yml (File for NGINX and docker-compose configuration)
-|- license.txt
-|- readme-id.md (readme for Bahasa)
-|- readme.md (readme for English)
-```
+Clone the repository and enter it:
 
-## Prerequisited
-Before doing anything, first download and install latest version of docker.
-- [Docker for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
-- [Docker for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
-
-## Download and Install
-
-This is the way of download and install SEME_WebStack.
-
-### Download using git in windows
-
-Please make sure you have already installed git for you computer.
-
-We assumed you want to installed on drive D.
-
-Run this command from terminal, CMD or CMDER.
-```
-d:
+```sh
 git clone https://github.com/drosanda/seme_webstack.git
-cd  seme_webstack
-```
-### Download using git in mac
-
-Please make sure you have already installed git for you computer.
-
-We assumed you want to installed on current user home directory.
-
-Run this command from terminal.
-
-```
-cd
-git clone https://github.com/drosanda/seme_webstack.git
-cd  seme_webstack
-```
-
-### Building PHP-FPM image
-
-After clone or download we have to build PHP-FPM image.
-This process will take a while depends on your internet connection and your computer specification.
-
-On inside seme_webstack directory, run this command.
-
-```
-cd php
-docker build -t seme_webstack_php .
-```
-
-Site back and relax because this process will takes more times than you wanted.
-
-### Running Docker Compose
-After building PHP image completed, back to seme_webstack directory by executing this command and then execute docker compose.
-
-```
-cd ..
-docker-compose up
-```
-
-## Test the Container
-After docker compose finished, you can try open http://localhost/ to see the container already started or not.
-
-
-## Using the container
-
-for using this container you can combine the source code by using `git submodule` or `copy paste` directly to inside `code` directory.
-
-### Using `git submodule`
-
-We assuming you install seme_webstack same way with download and install section.
-
-#### Windows
-
-Please run this from terminal, CMD, or CMDER.
-```
-D:
 cd seme_webstack
-RMDIR /Q/S code
-git submodule https://github.com/drosanda/seme-framework.git code
 ```
 
-#### Mac
+Create the external Docker network required by Compose, then build and start the services:
 
-Please run this command from terminal.
-```
-cd
-cd seme_webstack
-rm -fr code
-git submodule https://github.com/drosanda/seme-framework.git code
+```sh
+docker network create seme_webstack_network
+docker compose up --build
 ```
 
-# License
-This project under licensed on MIT more information of license can be found on license.txt
+If the network already exists, Docker reports that; continue with `docker compose up --build`.
+
+Place your PHP application (including its `index.php`) in the repository root. Open <http://localhost:8080/> to check the site. To stop the services, press `Ctrl+C`; run `docker compose down` to remove the containers.
+
+## Selecting a PHP version
+
+The `php` service in [`docker-compose.yml`](docker-compose.yml) builds PHP 8.5 by default. To use another included version, update both its `image` tag and `build.context` to the matching top-level version directory. For example, PHP 8.4 uses:
+
+```yaml
+image: drosanda/seme_webstack_php:8.4
+build:
+  context: ./8.4/
+  dockerfile: Dockerfile
+```
+
+Available version directories are `7.4`, `8.2`, `8.3`, `8.4`, and `8.5`. Rebuild after changing versions:
+
+```sh
+docker compose up --build
+```
+
+Each version directory contains its `Dockerfile`, PHP configuration, and platform-specific build scripts. The scripts in `build.sh` and `build.cmd` are intended for publishing multi-platform images; they use Docker Buildx and SSH-agent access. For local development, the Compose build is usually sufficient.
+
+## Project layout
+
+| Path | Purpose |
+| --- | --- |
+| `docker-compose.yml` | Nginx and PHP-FPM services and their shared network |
+| `nginx/` | Nginx virtual host, main configuration, and FastCGI parameters |
+| `7.4/`, `8.2/`–`8.5/` | PHP-FPM image definitions and PHP configuration |
+| `docker-build-prepare.sh` | Creates and initializes a Docker Buildx builder |
+| `license.txt` | MIT license |
+
+## Troubleshooting
+
+- **Compose cannot find a build context or Nginx config:** run Compose from the repository root and check that the paths in `docker-compose.yml` point to the top-level version and `nginx/` directories.
+- **Network not found:** create it with `docker network create seme_webstack_network`. The network is declared external and is not created by Compose.
+- **The site does not load:** confirm both services are running with `docker compose ps`, then inspect logs with `docker compose logs`.
+- **PHP requests fail:** verify the application has an `index.php` at the mounted repository root and that the `php` service is running.
+
+## License
+
+This project is distributed under the MIT License. See [`license.txt`](license.txt).

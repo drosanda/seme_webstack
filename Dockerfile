@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM arm64v8/php:7.4-apache
 
 ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
 

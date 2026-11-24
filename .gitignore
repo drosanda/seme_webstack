@@ -1,2 +1,15 @@
+# OS-generated files
 .DS_Store
-code/*
+Thumbs.db
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Editor and temporary files
+*.swp
+*.swo
+*~
+*.log
+*.tmp

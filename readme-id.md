@@ -1,126 +1,72 @@
-# Seme WebStack (Bahasa)
-Seme WebStack adalah Container yang sudah memiliki Nginx dan PHP-FPM versi 7.x didalamya. Kontainer ini digunakan untuk proses pengembangan aplikasi maupun pada tingkat produksi untuk penggunaan server berbasis kontainer.
+# Seme WebStack
 
-Tutorial ini ada dalam Bahasa Indonesia.
-For [English open this link](https://github.com/drosanda/seme_webstack).
+Seme WebStack adalah lingkungan pengembangan berbasis Docker Compose untuk menjalankan aplikasi PHP dengan Nginx dan PHP-FPM. Proyek ini menyediakan konfigurasi image PHP-FPM versi 7.4 dan 8.2–8.5; konfigurasi Compose menggunakan PHP 8.5 secara default.
 
-## Catatan perubahan
-Berikut ini adalah catatan perubahan versi nya
+File aplikasi dipasang dari direktori utama repositori ke `/var/www/html` di kedua container. Nginx dapat diakses melalui port `8080` pada host dan meneruskan permintaan PHP ke layanan `php`.
 
-### version 1.0.1
-Change default PHP-FPM container to 7.4.
-
-### version 1.0.0
-This is initial version.
-
-## Stuktur File dan direktori
-
-File container ini terdiri dari beberapa file dan direktori. Berikut ini adalah penjelasannya.
-
-```
-|-- code (Direktori digunakan untuk menyimpan source code yang akan dijalankan didalam container)
-|---- index.php (berisi phpinfo untuk melihat versi php yang telah terinstal)
-|- conf (Direktori untuk pengaturan php-fpm dan nginx)
-|- php
-|---- Dockerfile (file yang berisi pengaturan untuk pembuatan container PHP-FPM)
-|- docker-compose.yml (file yang berisi pengaturan untuk docker compose)
-|- license.txt (file yang berisi tentang dokumentasi lisensi -- dalam bahasa inggris)
-|- readme-id.md (file dokumentasi berbahasa indonesia)
-|- readme.md (file dokumentasi berbahasa inggris)
-```
+[Read the documentation in English](readme.md).
 
 ## Prasyarat
-Sebelum melakukan apa pun, unduh dan instal Docker versi terbaru.
 
-- [Docker untuk Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
-- [Docker untuk Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac/)
+- Docker Engine dengan plugin Docker Compose (`docker compose`)
+- Git untuk mengkloning repositori
 
-## Download dan Instal
+## Mulai cepat
 
-Ini adalah cara mengunduh dan menginstal SEME_WebStack.
+Kloning repositori, lalu masuk ke direktorinya:
 
-### Unduh menggunakan git di windows
-
-Pastikan Anda telah menginstal git untuk komputer Anda.
-
-Kami berasumsi Anda ingin menginstal pada drive D.
-
-Jalankan perintah ini dari terminal, CMD atau CMDER.
-
-```
-d:
+```sh
 git clone https://github.com/drosanda/seme_webstack.git
-cd  seme_webstack
-```
-
-### Unduh menggunakan git di mac
-
-Pastikan Anda telah menginstal git untuk komputer Anda.
-
-Kami berasumsi Anda ingin menginstal pada direktori /home/pengguna/ saat ini.
-
-Jalankan perintah ini dari terminal.
-
-```
-cd
-git clone https://github.com/drosanda/seme_webstack.git
-cd  seme_webstack
-```
-
-### Membuat image untuk PHP-FPM
-
-Setelah clone atau download kita harus Membuat image PHP-FPM.
-
-Proses ini akan memakan waktu cukup lama tergantung koneksi internet dan spesifikasi komputer Anda.
-
-Di dalam direktori seme_webstack, jalankan perintah ini.
-
-```
-cd php
-docker build -t seme_webstack_php .
-```
-
-Bersantai lah sedikit, karena proses ini akan memakan waktu lebih lama dari yang Anda kira :D
-
-### Menjalankan Docker Compose
-
-Setelah membangun image PHP selesai, kembali ke direktori seme_webstack dengan menjalankan perintah ini dan kemudian jalankan pembuatan docker.
-
-```
-cd ..
-docker-compose up
-```
-
-## Uji Container
-Setelah proses docker compose selesai, Anda dapat mencoba membuka http://localhost/ untuk melihat container sudah berjalan atau belum.
-
-## Implementasi
-
-Untuk proses implementasi, bisa menggunakan `git submodule` atau dengan `copy paste` ke dalam direktori`code`.
-
-### Implementasi menggunakan `git submodule`
-
-Asumsikan anda menginstal git sama seperti dalam proses download dan instal.
-
-#### Windows
-
-Untuk windows, jalankan ini di terminal atau CMD.
-```
-D:
 cd seme_webstack
-RMDIR /Q/S code
-git submodule https://github.com/drosanda/seme-framework.git code
 ```
 
-#### Mac
+Buat network Docker eksternal yang dibutuhkan Compose, lalu bangun dan jalankan layanan:
 
-Untuk mac, jalankan ini di terminal atau CMD.
+```sh
+docker network create seme_webstack_network
+docker compose up --build
 ```
-cd
-cd seme_webstack
-rm -fr code
-git submodule https://github.com/drosanda/seme-framework.git code
+
+Jika network tersebut sudah ada, Docker akan memberi tahu Anda; lanjutkan dengan `docker compose up --build`.
+
+Letakkan aplikasi PHP (termasuk `index.php`) di direktori utama repositori. Buka <http://localhost:8080/> untuk memeriksa situs. Tekan `Ctrl+C` untuk menghentikan layanan; jalankan `docker compose down` untuk menghapus container.
+
+## Memilih versi PHP
+
+Layanan `php` di [`docker-compose.yml`](docker-compose.yml) menggunakan PHP 8.5 secara default. Untuk menggunakan versi lain yang tersedia, ubah tag `image` dan `build.context` agar mengarah ke direktori versi yang sama. Contoh untuk PHP 8.4:
+
+```yaml
+image: drosanda/seme_webstack_php:8.4
+build:
+  context: ./8.4/
+  dockerfile: Dockerfile
 ```
+
+Direktori versi yang tersedia: `7.4`, `8.2`, `8.3`, `8.4`, dan `8.5`. Bangun ulang setelah mengganti versi:
+
+```sh
+docker compose up --build
+```
+
+Setiap direktori versi berisi `Dockerfile`, konfigurasi PHP, dan skrip build khusus platform. Skrip `build.sh` dan `build.cmd` ditujukan untuk menerbitkan image multi-platform; skrip tersebut menggunakan Docker Buildx dan akses SSH-agent. Untuk pengembangan lokal, build melalui Compose biasanya sudah cukup.
+
+## Struktur proyek
+
+| Path | Kegunaan |
+| --- | --- |
+| `docker-compose.yml` | Layanan Nginx dan PHP-FPM serta network bersama |
+| `nginx/` | Virtual host Nginx, konfigurasi utama, dan parameter FastCGI |
+| `7.4/`, `8.2/`–`8.5/` | Definisi image PHP-FPM dan konfigurasi PHP |
+| `docker-build-prepare.sh` | Membuat dan menginisialisasi builder Docker Buildx |
+| `license.txt` | Lisensi MIT |
+
+## Pemecahan masalah
+
+- **Compose tidak menemukan build context atau konfigurasi Nginx:** jalankan Compose dari direktori utama repositori dan pastikan path di `docker-compose.yml` mengarah ke direktori versi dan `nginx/` yang berada di root.
+- **Network tidak ditemukan:** buat dengan `docker network create seme_webstack_network`. Network ini dideklarasikan sebagai eksternal sehingga tidak dibuat oleh Compose.
+- **Situs tidak dapat dibuka:** pastikan kedua layanan berjalan dengan `docker compose ps`, lalu periksa log dengan `docker compose logs`.
+- **Permintaan PHP gagal:** pastikan aplikasi memiliki `index.php` di root repositori yang dipasang dan layanan `php` sedang berjalan.
 
 ## Lisensi
-Proyek ini di bawah lisensi MIT informasi lebih lanjut tentang lisensi dapat ditemukan pada file license.txt
+
+Proyek ini menggunakan Lisensi MIT. Lihat [`license.txt`](license.txt).
