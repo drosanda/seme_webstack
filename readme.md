@@ -139,7 +139,7 @@ build:
   dockerfile: Dockerfile
 ```
 
-Available version directories are `7.4`, `8.2`, `8.3`, `8.4`, and `8.5`. Rebuild after changing versions:
+Available version directories are `7.4`, `8.2`, `8.3`, `8.4`, and `8.5`. Published images are available on [Docker Hub](https://hub.docker.com/r/drosanda/seme_webstack_php). Rebuild after changing versions:
 
 ```sh
 docker compose up --build

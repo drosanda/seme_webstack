@@ -139,7 +139,7 @@ build:
   dockerfile: Dockerfile
 ```
 
-Direktori versi yang tersedia: `7.4`, `8.2`, `8.3`, `8.4`, dan `8.5`. Bangun ulang setelah mengganti versi:
+Direktori versi yang tersedia: `7.4`, `8.2`, `8.3`, `8.4`, dan `8.5`. Image yang telah dipublikasikan tersedia di [Docker Hub](https://hub.docker.com/r/drosanda/seme_webstack_php). Bangun ulang setelah mengganti versi:
 
 ```sh
 docker compose up --build
